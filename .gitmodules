@@ -1,0 +1,12 @@
+[submodule "services/magda"]
+	path = services/magda
+	url = git@github.com:mkarys/async_service.git
+[submodule "services/ania"]
+	path = services/ania
+	url = git@github.com:arudzinska/async-memes.git
+[submodule "services/radek"]
+	path = services/radek
+	url = git@github.com:radekwlsk/asyt-colors.git
+[submodule "services/janek"]
+	path = services/janek
+	url = git@github.com:nerjan/async-challange.git

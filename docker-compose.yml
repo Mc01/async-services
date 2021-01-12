@@ -1,0 +1,28 @@
+version: '3'
+
+services:
+  ania-async-service:
+    user: "${UID:-1000}"
+    container_name: ania-async-service
+    build:
+      context: ./services/ania/
+      dockerfile: ./async-memes/Dockerfile
+      args:
+        USER_ID: "${UID:-1000}"
+    ports:
+      - "5001:5000"
+    env_file:
+      - ./services/ania/.env
+    depends_on:
+      - ania-async-engine
+
+  ania-async-engine:
+    user: "${UID:-1000}"
+    container_name: ania-async-engine
+    build:
+      context: ./services/ania/
+      dockerfile: ./meme-generator/Dockerfile
+      args:
+        USER_ID: "${UID:-1000}"
+    env_file:
+      - ./services/ania/.env
