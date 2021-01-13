@@ -1,16 +1,31 @@
 version: '3'
 
 services:
-  ania-async-service:
+  marcin-client:
+    container_name: marcin-client
+    build:
+      context: ./docker
+      dockerfile: ./Dockerfile
+    volumes:
+      - ./client/:/app
+    command: /./entrypoint.py
+    depends_on:
+      - ania-async
+      - janek-async
+      - magda-async
+    env_file:
+      - .env
+
+  ania-async:
     user: "${UID:-1000}"
-    container_name: ania-async-service
+    container_name: ania-async
     build:
       context: ./services/ania/
       dockerfile: ./async-memes/Dockerfile
       args:
         USER_ID: "${UID:-1000}"
     ports:
-      - "5001:5000"
+      - "6001:5000"
     env_file:
       - ./services/ania/.env
     depends_on:
@@ -26,3 +41,48 @@ services:
         USER_ID: "${UID:-1000}"
     env_file:
       - ./services/ania/.env
+
+  janek-async:
+    container_name: janek-async
+    build:
+      context: ./services/janek/
+      dockerfile: ./Dockerfile
+    command: python manage.py runserver 0.0.0.0:8000
+    env_file:
+      - ./services/janek/.env
+    volumes:
+      - ./services/janek/:/app
+    ports:
+      - "6002:8000"
+    depends_on:
+      - janek-db
+
+  janek-db:
+    container_name: janek-db
+    image: postgres
+    env_file:
+      - ./services/janek/.env
+
+  magda-async:
+    container_name: magda-async
+    build:
+      context: ./services/magda/
+      dockerfile: ./docker/backend.dockerfile
+    image: async:latest
+    restart: always
+    ports:
+      - "6003:8000"
+    depends_on:
+      - magda-db
+    env_file: ./services/magda/docker/backend.env
+    volumes:
+      - ./services/magda/:/async_service
+    links:
+      - magda-db:magda-postgres
+
+  magda-db:
+    container_name: magda-db
+    volumes:
+      - ./services/magda/postgresql:/var/lib/postgresql/data
+    image: postgres:9.5-alpine
+    env_file: ./services/magda/docker/backend.env
