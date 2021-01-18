@@ -7,10 +7,12 @@ class Config:
         ania_service = self.require_env('ANIA_ASYNC')
         janek_service = self.require_env('JANEK_ASYNC')
         magda_service = self.require_env('MAGDA_ASYNC')
+        michal_service = self.require_env('MICHAL_ASYNC')
         self.services: List[str] = [
             ania_service,
             janek_service,
             magda_service,
+            michal_service,
         ]
 
     @staticmethod

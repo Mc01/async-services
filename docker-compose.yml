@@ -13,6 +13,7 @@ services:
       - ania-async
       - janek-async
       - magda-async
+      - michal-async
     env_file:
       - .env
 
@@ -25,7 +26,7 @@ services:
       args:
         USER_ID: "${UID:-1000}"
     ports:
-      - "6001:5000"
+      - "8001:5000"
     env_file:
       - ./services/ania/.env
     depends_on:
@@ -53,7 +54,7 @@ services:
     volumes:
       - ./services/janek/:/app
     ports:
-      - "6002:8000"
+      - "8002:8000"
     depends_on:
       - janek-db
 
@@ -71,7 +72,7 @@ services:
     image: async:latest
     restart: always
     ports:
-      - "6003:8000"
+      - "8003:8000"
     depends_on:
       - magda-db
     env_file: ./services/magda/docker/backend.env
@@ -86,3 +87,16 @@ services:
       - ./services/magda/postgresql:/var/lib/postgresql/data
     image: postgres:9.5-alpine
     env_file: ./services/magda/docker/backend.env
+
+  michal-async:
+    container_name: michal-async
+    build:
+      context: ./services/michal/
+      dockerfile: ./Dockerfile
+    command: python manage.py runserver 0.0.0.0:8000
+    volumes:
+      - ./services/michal/:/code
+    ports:
+      - "8004:8000"
+    env_file:
+      - ./services/michal/.env

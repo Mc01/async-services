@@ -10,3 +10,6 @@
 [submodule "services/janek"]
 	path = services/janek
 	url = git@github.com:nerjan/async-challange.git
+[submodule "services/michal"]
+	path = services/michal
+	url = git@github.com:MKaras93/okr-challenge.git
