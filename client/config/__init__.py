@@ -1,14 +1,38 @@
 from os import getenv
 from typing import List
 
+from .service import Service
+from ..utils.parsers import (
+    AniaRequestParser,
+    JanekRequestParser,
+    MagdaRequestParser,
+    MichalRequestParser,
+)
+
 
 class Config:
     def __init__(self):
-        ania_service = self.require_env('ANIA_ASYNC')
-        janek_service = self.require_env('JANEK_ASYNC')
-        magda_service = self.require_env('MAGDA_ASYNC')
-        michal_service = self.require_env('MICHAL_ASYNC')
-        self.services: List[str] = [
+        ania_service = Service(
+            endpoint=self.require_env('ANIA_ASYNC'),
+            location='/api/',
+            request_parser=AniaRequestParser(),
+        )
+        janek_service = Service(
+            endpoint=self.require_env('JANEK_ASYNC'),
+            location='/firstone/',
+            request_parser=JanekRequestParser(),
+        )
+        magda_service = Service(
+            endpoint=self.require_env('MAGDA_ASYNC'),
+            location='/api/',
+            request_parser=MagdaRequestParser(),
+        )
+        michal_service = Service(
+            endpoint=self.require_env('MICHAL_ASYNC'),
+            location='/api/',
+            request_parser=MichalRequestParser()
+        )
+        self.services: List[Service] = [
             ania_service,
             janek_service,
             magda_service,
