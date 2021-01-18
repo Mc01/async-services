@@ -4,6 +4,7 @@ Contains the services from:
 - Ania
 - Janek
 - Magda
+- Michal
 
 ## Setup
 
