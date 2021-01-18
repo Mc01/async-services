@@ -1,6 +1,6 @@
-import os
+from urllib.parse import urljoin
 
-from client.utils.request_parser import RequestParser
+from .request_parser import RequestParser
 
 
 class Service:
@@ -11,4 +11,4 @@ class Service:
 
     @property
     def url(self) -> str:
-        return os.path.join(self.endpoint, self.location)
+        return urljoin(self.endpoint, self.location)

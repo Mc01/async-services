@@ -48,7 +48,7 @@ services:
     build:
       context: ./services/janek/
       dockerfile: ./Dockerfile
-    command: python manage.py runserver 0.0.0.0:8000
+    command: ./entrypoint.sh
     env_file:
       - ./services/janek/.env
     volumes:
@@ -93,7 +93,7 @@ services:
     build:
       context: ./services/michal/
       dockerfile: ./Dockerfile
-    command: python manage.py runserver 0.0.0.0:8000
+    command: ./entrypoint.sh
     volumes:
       - ./services/michal/:/code
     ports:

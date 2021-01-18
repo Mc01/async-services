@@ -1,8 +1,8 @@
 from os import getenv
 from typing import List
 
-from .service import Service
-from ..utils.parsers import (
+from services import Service
+from services.parsers import (
     AniaRequestParser,
     JanekRequestParser,
     MagdaRequestParser,
@@ -33,7 +33,7 @@ class Config:
             request_parser=MichalRequestParser()
         )
         self.services: List[Service] = [
-            ania_service,
+            # ania_service,
             janek_service,
             magda_service,
             michal_service,
