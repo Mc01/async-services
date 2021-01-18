@@ -35,8 +35,8 @@ class Config:
         self.services: List[Service] = [
             # ania_service,
             janek_service,
-            magda_service,
-            michal_service,
+            # magda_service,
+            # michal_service,
         ]
 
     @staticmethod
