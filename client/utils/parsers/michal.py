@@ -14,4 +14,10 @@ class MichalRequestParser(RequestParser):
         return keywords
 
     def parse_response_data(self, response_data: Union[List, Dict]) -> Dict[str, Any]:
-        return {}
+        """
+        {
+          "keyword": "result",
+          ...
+        }
+        """
+        return response_data
