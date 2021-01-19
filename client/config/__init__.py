@@ -1,8 +1,8 @@
 from os import getenv
 from typing import List
 
-from services import Service
-from services.parsers import (
+from integrations import Service
+from integrations.parsers import (
     AniaRequestParser,
     JanekRequestParser,
     MagdaRequestParser,
@@ -39,8 +39,8 @@ class Config:
         self.services: List[Service] = [
             # ania_service,
             # janek_service,
-            magda_service,
-            # michal_service,
+            # magda_service,
+            michal_service,
         ]
 
     @staticmethod

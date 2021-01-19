@@ -28,6 +28,6 @@ class MagdaRequestParser(RequestParser):
         ]
         """
         return {
-            response_dict["keyword"]: response_data["image"]
+            response_dict["keyword"]: response_dict["image"]
             for response_dict in response_data
         }

@@ -4,7 +4,7 @@ import asyncio
 from aiohttp import InvalidURL, ContentTypeError
 
 from config import Config
-from services import Service
+from integrations import Service
 
 
 keywords = [
