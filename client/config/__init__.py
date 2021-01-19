@@ -37,9 +37,9 @@ class Config:
             request_parser=MichalRequestParser()
         )
         self.services: List[Service] = [
-            # ania_service,
-            # janek_service,
-            # magda_service,
+            ania_service,
+            janek_service,
+            magda_service,
             michal_service,
         ]
 
