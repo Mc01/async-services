@@ -2,9 +2,6 @@ from typing import List, Union, Dict, Any
 
 
 class RequestParser:
-    def __init__(self):
-        self.internal_data = {}
-
     def prepare_request_data(self, keywords: List[str]) -> Union[List, Dict]:
         raise NotImplementedError
 

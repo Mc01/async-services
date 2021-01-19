@@ -13,29 +13,33 @@ from services.parsers import (
 class Config:
     def __init__(self):
         ania_service = Service(
+            name='Ania',
             endpoint=self.require_env('ANIA_ASYNC'),
             location='/api/',
             request_parser=AniaRequestParser(),
         )
         janek_service = Service(
+            name='Janek',
             endpoint=self.require_env('JANEK_ASYNC'),
             location='/firstone/',
             request_parser=JanekRequestParser(),
         )
         magda_service = Service(
+            name='Magda',
             endpoint=self.require_env('MAGDA_ASYNC'),
             location='/api/',
             request_parser=MagdaRequestParser(),
         )
         michal_service = Service(
+            name='Michal',
             endpoint=self.require_env('MICHAL_ASYNC'),
             location='/api/',
             request_parser=MichalRequestParser()
         )
         self.services: List[Service] = [
             # ania_service,
-            janek_service,
-            # magda_service,
+            # janek_service,
+            magda_service,
             # michal_service,
         ]
 

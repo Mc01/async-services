@@ -25,6 +25,8 @@ services:
       dockerfile: ./async-memes/Dockerfile
       args:
         USER_ID: "${UID:-1000}"
+    volumes:
+      - ./services/ania/async-memes/:/app
     ports:
       - "8001:5000"
     env_file:
