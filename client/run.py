@@ -1,32 +1,16 @@
+import random
+import time
+from collections import defaultdict
+from decimal import Decimal
+
 import aiohttp
 import asyncio
 
 from aiohttp import InvalidURL, ContentTypeError
 
 from config import Config
+from config.keywords import keywords
 from integrations import Service
-
-
-keywords = [
-    "bangkok",
-    "miami vice",
-    "mobbed by raccoons",
-    "light it up",
-    "rewind",
-    "dumb ways to die",
-    "Winnie the Pooh",
-    "You talk the talk do you walk the walk",
-    "banana split",
-    "pseudopseudohypoparathyroidism",
-    "how to make sushi",
-    "come clean",
-    "what does idk mean",
-    "is this the reebok or the nike",
-    "limitless",
-    "it works on my machine",
-    "beyond imagination",
-    "tea time",
-]
 
 
 def validate_status(status: int, service: Service):
@@ -35,38 +19,77 @@ def validate_status(status: int, service: Service):
 
 async def main():
     config = Config()
-    responses = {}
+    sampled_keywords = random.sample(keywords, config.sample_size)
 
-    for service in config.services:
-        async with aiohttp.ClientSession() as session:
-            request_data = service.request_parser.prepare_request_data(
-                keywords=keywords,
-            )
+    times = defaultdict(lambda: defaultdict(dict))
+    responses = defaultdict(dict)
 
-            try:
-                async with session.post(
-                    url=service.url,
-                    json=request_data,
-                ) as response:
-                    validate_status(
-                        status=response.status,
-                        service=service,
-                    )
-                    response_json = await response.json()
-            except InvalidURL as e:
-                raise Exception(dict(
-                    endpoint=service.endpoint,
-                    url=service.url,
-                    error=e,
-                ))
+    print('***  Config  ***\n')
+    print(f'  Services: {config.run_services}')
+    print(f'  Keywords sample: {config.sample_size}')
+    print(f'  Attempts: {config.attempts}')
+    print('---  ---  ---\n')
 
-            responses[service.name] = service.request_parser.parse_response_data(
-                response_data=response_json,
-            )
+    for service in config.active_services:
+        for attempt in range(config.attempts):
+            async with aiohttp.ClientSession() as session:
+                request_data = service.request_parser.prepare_request_data(
+                    keywords=sampled_keywords,
+                )
 
-    for service_name, service_response in responses.items():
-        for keyword, results in service_response.items():
-            print(f'Service {service_name} Keyword {keyword}: {results}')
+                times[service.name][attempt]['request_time'] = Decimal(str(time.time()))
+
+                try:
+                    async with session.post(
+                        url=service.url,
+                        json=request_data,
+                    ) as response:
+                        times[service.name][attempt]['response_time'] = Decimal(str(time.time()))
+                        validate_status(
+                            status=response.status,
+                            service=service,
+                        )
+                        response_json = await response.json()
+                except InvalidURL as e:
+                    raise Exception(dict(
+                        endpoint=service.endpoint,
+                        url=service.url,
+                        error=e,
+                    ))
+
+                responses[service.name][attempt] = service.request_parser.parse_response_data(
+                    response_data=response_json,
+                )
+
+    print('***  Results  ***\n')
+
+    for service_name, attempted_responses in responses.items():
+        print(f'>>>  Service {service_name} <<<')
+        for attempt, response in attempted_responses.items():
+            for keyword, results in response.items():
+                print(f'  Attempt {attempt} - Keyword {keyword}: {results}')
+
+        print('---  ---  ---\n')
+
+    print('***  Times  ***\n')
+
+    for service_name, attempted_times in times.items():
+        print(f'>>>  Service {service_name} <<<')
+        running_times = []
+
+        for attempt, times in attempted_times.items():
+            running_time = times["response_time"] - times["request_time"]
+            running_times.append(running_time)
+            print(f'  Attempt {attempt} - Time {running_time}')
+
+        min_val = min(running_times)
+        avg_val = round(sum(running_times) / len(running_times), 7)
+        max_val = max(running_times)
+
+        print(f'  :::  Min {min_val} Avg {avg_val} Max {max_val}')
+        print('---  ---  ---\n')
+
+    print('***  ***  ***')
 
 
 loop = asyncio.get_event_loop()

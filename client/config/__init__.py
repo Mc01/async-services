@@ -36,12 +36,22 @@ class Config:
             location='/api/',
             request_parser=MichalRequestParser()
         )
-        self.services: List[Service] = [
+        self.all_services: List[Service] = [
             ania_service,
             janek_service,
             magda_service,
             michal_service,
         ]
+
+        self.run_services = self.require_env('RUN_SERVICES').split(',')
+        self.active_services: List[Service] = []
+        for service_id in self.run_services:
+            self.active_services.append(
+                self.all_services[int(service_id)]
+            )
+
+        self.sample_size = int(self.require_env('SAMPLE_SIZE'))
+        self.attempts = int(self.require_env('ATTEMPTS'))
 
     @staticmethod
     def require_env(env) -> str:

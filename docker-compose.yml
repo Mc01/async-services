@@ -31,6 +31,7 @@ services:
       - "8001:5000"
     env_file:
       - ./services/ania/.env
+      - .env.shared
     depends_on:
       - ania-async-engine
 
@@ -53,6 +54,7 @@ services:
     command: ./entrypoint.sh
     env_file:
       - ./services/janek/.env
+      - .env.shared
     volumes:
       - ./services/janek/:/app
     ports:
@@ -77,7 +79,9 @@ services:
       - "8003:8000"
     depends_on:
       - magda-db
-    env_file: ./services/magda/docker/backend.env
+    env_file:
+      - ./services/magda/docker/backend.env
+      - .env.shared
     volumes:
       - ./services/magda/:/async_service
     links:
@@ -88,7 +92,8 @@ services:
     volumes:
       - ./services/magda/postgresql:/var/lib/postgresql/data
     image: postgres:9.5-alpine
-    env_file: ./services/magda/docker/backend.env
+    env_file:
+      - ./services/magda/docker/backend.env
 
   michal-async:
     container_name: michal-async
@@ -102,3 +107,4 @@ services:
       - "8004:8000"
     env_file:
       - ./services/michal/.env
+      - .env.shared

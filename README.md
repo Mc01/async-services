@@ -11,6 +11,7 @@ Contains the services from:
 Fill in secrets
 ```
 cp .env.template .env && nano .env
+cp .env.shared.template .env.shared
 ```
 
 Build
