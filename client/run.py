@@ -6,7 +6,7 @@ from decimal import Decimal
 import aiohttp
 import asyncio
 
-from aiohttp import InvalidURL, ContentTypeError
+from aiohttp import InvalidURL
 
 from config import Config
 from config.keywords import keywords
@@ -26,6 +26,7 @@ async def main():
 
     print('***  Config  ***\n')
     print(f'  Services: {config.run_services}')
+    print(f'  Async mode in services: {config.async_services}')
     print(f'  Keywords sample: {config.sample_size}')
     print(f'  Attempts: {config.attempts}')
     print('---  ---  ---\n')

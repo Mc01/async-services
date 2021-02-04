@@ -53,6 +53,8 @@ class Config:
         self.sample_size = int(self.require_env('SAMPLE_SIZE'))
         self.attempts = int(self.require_env('ATTEMPTS'))
 
+        self.async_services = self.require_env('ASYNC') == 'True'
+
     @staticmethod
     def require_env(env) -> str:
         value = getenv(env)

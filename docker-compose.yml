@@ -16,6 +16,7 @@ services:
       - michal-async
     env_file:
       - .env
+      - .env.shared
 
   ania-async:
     user: "${UID:-1000}"
